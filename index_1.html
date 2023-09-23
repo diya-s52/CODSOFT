@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: #444;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .screen {
+            font-size: 32px;
+            color: #fff;
+            background-color: #222;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .btn {
+            font-size: 24px;
+            padding: 15px;
+            background-color: #555;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="screen" id="display" value="0" readonly>
+        <div class="btn-grid">
+            <button class="btn" onclick="appendToScreen('7')">7</button>
+            <button class="btn" onclick="appendToScreen('8')">8</button>
+            <button class="btn" onclick="appendToScreen('9')">9</button>
+            <button class="btn" onclick="performOperation('+')">+</button>
+            <button class="btn" onclick="appendToScreen('4')">4</button>
+            <button class="btn" onclick="appendToScreen('5')">5</button>
+            <button class="btn" onclick="appendToScreen('6')">6</button>
+            <button class="btn" onclick="performOperation('-')">-</button>
+            <button class="btn" onclick="appendToScreen('1')">1</button>
+            <button class="btn" onclick="appendToScreen('2')">2</button>
+            <button class="btn" onclick="appendToScreen('3')">3</button>
+            <button class="btn" onclick="performOperation('*')">*</button>
+            <button class="btn" onclick="appendToScreen('0')">0</button>
+            <button class="btn" onclick="appendToScreen('.')">.</button>
+            <button class="btn" onclick="clearScreen()">C</button>
+            <button class="btn" onclick="performOperation('/')">/</button>
+            <button class="btn" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = '';
+        let currentOperator = '';
+        let result = 0;
+        let display = document.getElementById('display');
+
+        function appendToScreen(value) {
+            if (currentInput === '0') {
+                currentInput = '';
+            }
+            currentInput += value;
+            display.value = currentInput;
+        }
+
+        function performOperation(operator) {
+            if (currentOperator !== '') {
+                calculateResult();
+            }
+            currentOperator = operator;
+            currentInput += operator;
+            display.value = currentInput;
+        }
+
+        function calculateResult() {
+            const inputArr = currentInput.split(currentOperator);
+            if (inputArr.length === 2) {
+                const num1 = parseFloat(inputArr[0]);
+                const num2 = parseFloat(inputArr[1]);
+                switch (currentOperator) {
+                    case '+':
+                        result = num1 + num2;
+                        break;
+                    case '-':
+                        result = num1 - num2;
+                        break;
+                    case '*':
+                        result = num1 * num2;
+                        break;
+                    case '/':
+                        if (num2 !== 0) {
+                            result = num1 / num2;
+                        } else {
+                            result = 'Error';
+                        }
+                        break;
+                }
+                display.value = result;
+                currentInput = result.toString();
+                currentOperator = '';
+            }
+        }
+
+        function clearScreen() {
+            currentInput = '0';
+            currentOperator = '';
+            result = 0;
+            display.value = currentInput;
+        }
+    </script>
+</body>
+</html>
